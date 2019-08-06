@@ -1,7 +1,5 @@
-# Minio客户端快速入门指南
-[![Slack](https://slack.minio.io/slack?type=svg)](https://slack.minio.io) [![Go Report Card](https://goreportcard.com/badge/minio/mc)](https://goreportcard.com/report/minio/mc) [![Docker Pulls](https://img.shields.io/docker/pulls/minio/mc.svg?maxAge=604800)](https://hub.docker.com/r/minio/mc/)
-
-Minio Client (mc)为ls，cat，cp，mirror，diff，find等UNIX命令提供了一种替代方案。它支持文件系统和兼容Amazon S3的云存储服务（AWS Signature v2和v4）。
+# 快速入门指南
+滴滴云MC是基于Minio客户端开发,具体Minio客户端所有的功能并支持超大文件检查与修复功能。Minio Client (mc)为ls，cat，cp，mirror，diff，find等UNIX命令提供了一种替代方案。
 
 
 ```
@@ -21,28 +19,9 @@ policy   管理访问策略。
 session  为cp命令管理保存的会话。
 config   管理mc配置文件。
 update   检查软件更新。
+check    检查与修复超大文件。
 version  输出版本信息。
 ```
-
-## Docker容器
-### 稳定版
-```
-docker pull minio/mc
-docker run minio/mc ls play
-```
-
-### 尝鲜版
-```
-docker pull minio/mc:edge
-docker run minio/mc:edge ls play
-```
-
-**注意:** 上述示例默认使用Minio[演示环境](#test-your-setup)做演示，如果想用`mc`操作其它S3兼容的服务，采用下面的方式来启动容器：
-
-```sh
-docker run -it --entrypoint=/bin/sh minio/mc
-```
-
 然后使用[`mc config`命令](#add-a-cloud-storage-service)。
 
 ## macOS
@@ -50,40 +29,8 @@ docker run -it --entrypoint=/bin/sh minio/mc
 使用[Homebrew](http://brew.sh/)安装mc。
 
 ```sh
-brew install minio/stable/mc
+brew install didiyun/stable/mc
 mc --help
-```
-
-## GNU/Linux
-### 下载二进制文件
-| 平台 | CPU架构 | URL |
-| ---------- | -------- |------|
-|GNU/Linux|64-bit Intel|https://dl.minio.io/client/mc/release/linux-amd64/mc |
-
-```sh
-chmod +x mc
-./mc --help
-```
-
-## Microsoft Windows
-### 下载二进制文件
-| 平台 | CPU架构 | URL |
-| ---------- | -------- |------|
-|Microsoft Windows|64-bit Intel|https://dl.minio.io/client/mc/release/windows-amd64/mc.exe |
-
-```sh
-mc.exe --help
-```
-
-## 通过源码安装
-通过源码安装仅适用于开发人员和高级用户。`mc update`命令不支持基于源码安装的更新通知。请从https://minio.io/downloads/#minio-client下载官方版本。
-
-如果您没有Golang环境，请参照[如何安装Golang](https://docs.minio.io/docs/how-to-install-golang)。
-
-```sh
-go get -d github.com/minio/mc
-cd ${GOPATH}/src/github.com/minio/mc
-make
 ```
 
 ## 添加一个云存储服务
