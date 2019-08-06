@@ -1,29 +1,28 @@
-# Minio Client Quickstart Guide
-[![Slack](https://slack.minio.io/slack?type=svg)](https://slack.minio.io) [![Go Report Card](https://goreportcard.com/badge/minio/mc)](https://goreportcard.com/report/minio/mc) [![Docker Pulls](https://img.shields.io/docker/pulls/minio/mc.svg?maxAge=604800)](https://hub.docker.com/r/minio/mc/)
-
-Minio Client (mc) provides a modern alternative to UNIX commands like ls, cat, cp, mirror, diff, find etc. It supports filesystems and Amazon S3 compatible cloud storage service (AWS Signature v2 and v4).
+# didiyun mc
+The didiyun mc is built based on Minio Client (mc) and has all the features of Minio Client (mc). 
 
 ```
-ls       list buckets and objects
-mb       make a bucket
-cat      display object contents
-pipe     stream STDIN to an object
-share    generate URL for temporary access to an object
-cp       copy objects
-mirror   synchronize objects to a remote site
-find     search for objects
-sql      run sql queries on objects
-stat     stat contents of objects
-diff     list differences in object name, size, and date between buckets
-rm       remove objects
-event    manage object notifications
-watch    watch for object events
-policy   manage anonymous access to objects
-admin    manage minio servers
-session  manage saved sessions for cp command
-config   manage mc configuration file
-update   check for a new software update
-version  print version info
+  ls       list buckets and objects
+  mb       make a bucket
+  cat      display object contents
+  pipe     stream STDIN to an object
+  share    generate URL for temporary access to an object
+  cp       copy objects
+  mirror   synchronize object(s) to a remote site
+  find     search for objects
+  sql      run sql queries on objects
+  stat     show object metadata
+  diff     list differences in object name, size, and date between two buckets
+  rm       remove objects
+  event    configure object notifications
+  watch    listen for object notification events
+  policy   manage anonymous access to buckets and objects
+  admin    manage minio servers
+  session  resume interrupted operations
+  config   configure minio client
+  update   update mc to latest release
+  check    check big object content
+  version  show version info
 ```
 
 ## Docker Container
