@@ -1,5 +1,5 @@
-# didiyun mc
-The didiyun mc is built based on Minio Client (mc) and has all the features of Minio Client (mc). 
+# Quickstart Guide
+The didiyun mc is built based on Minio Client (mc) and has all the features of Minio Client (mc). MinIO Client (mc) provides a modern alternative to UNIX commands like ls, cat, cp, mirror, diff, find etc.
 
 ```
   ls       list buckets and objects
