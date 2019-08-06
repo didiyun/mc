@@ -1,5 +1,5 @@
 # 快速开始
-滴滴云MC主要是基于![Minio Client](https://github.com/minio/mc)开发，支持Minio Client (mc)所有功能同时增加了超大对象检查功能。
+滴滴云MC主要是基于 [Minio Client](https://github.com/minio/mc)开发，支持Minio Client (mc)所有功能同时增加了超大对象检查功能。
 
 ## 如何申请滴滴云S3的Bucket？
 先注册**滴滴云账号**，进入：https://app.didiyun.com/#/s3/add 申请Bucket，如下图：
