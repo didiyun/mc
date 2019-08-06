@@ -25,66 +25,14 @@ The didiyun mc is built based on Minio Client (mc) and has all the features of M
   version  show version info
 ```
 
-## Docker Container
-### Stable
-```
-docker pull minio/mc
-docker run minio/mc ls play
-```
-
-### Edge
-```
-docker pull minio/mc:edge
-docker run minio/mc:edge ls play
-```
-
-**Note:** Above examples run `mc` against Minio [_play_ environment](#test-your-setup) by default. To run `mc` against other S3 compatible servers, start the container this way:
-
-```sh
-docker run -it --entrypoint=/bin/sh minio/mc
-```
-
-then use the [`mc config` command](#add-a-cloud-storage-service).
-
-## macOS
-### Homebrew
-Install mc packages using [Homebrew](http://brew.sh/)
-
-```sh
-brew install minio/stable/mc
-mc --help
-```
-
-## GNU/Linux
-### Binary Download
-| Platform | Architecture | URL |
-| ---------- | -------- |------|
-|GNU/Linux|64-bit Intel|https://dl.minio.io/client/mc/release/linux-amd64/mc |
-
-```sh
-wget https://dl.minio.io/client/mc/release/linux-amd64/mc
-chmod +x mc
-./mc --help
-```
-
-## Microsoft Windows
-### Binary Download
-| Platform | Architecture | URL |
-| ---------- | -------- |------|
-|Microsoft Windows|64-bit Intel|https://dl.minio.io/client/mc/release/windows-amd64/mc.exe |
-
-```sh
-mc.exe --help
-```
-
 ## Install from Source
 Source installation is intended only for developers and advanced users. `mc update` command does not support update notifications for source based installations. Please download official releases from https://minio.io/downloads/#minio-client.
 
 If you do not have a working Golang environment, please follow [How to install Golang](https://docs.minio.io/docs/how-to-install-golang).
 
 ```sh
-go get -d github.com/minio/mc
-cd ${GOPATH}/src/github.com/minio/mc
+go get -d github.com/didiyun/mc
+cd ${GOPATH}/src/github.com/didiyun/mc
 make
 ```
 
