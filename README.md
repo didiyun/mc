@@ -1,7 +1,175 @@
-# Quickstart Guide
-The didiyun mc is built based on Minio Client (mc) and has all the features of Minio Client (mc). MinIO Client (mc) provides a modern alternative to UNIX commands like ls, cat, cp, mirror, diff, find etc.
+# 快速开始
+滴滴云MC主要是基于Minio Client (mc)开发，支持Minio Client (mc)所有功能同时增加了超大对象检查功能。
+
+## 如何申请滴滴云S3的Bucket？
+先注册**滴滴云账号**，进入：https://app.didiyun.com/#/s3/add 申请Bucket，如下图：
+
+![didyun s3 bucket](http://img-ys011.didistatic.com/static/doc/S3_bucket_01.png)
+
+填写名称和设置访问权限，点立即创建即可。
+
+## 如何申请AK和SK？
+![didyun s3 AK SK](http://img-ys011.didistatic.com/static/doc/S3_AK_SK_01.png)
 
 ```
+操作步骤：
+（1）点击“API”按钮。
+（2）选择“对象存储密钥”。
+（3）点击“创建API密钥”。
+即可得到的SecretID和SecretKey值.
+```
+
+## 如何配置滴滴云Minio Client？
+获取到S3 API密钥后，得到了SecretID和SecretKey值，通过这两个值来配置滴滴云S3。
+
+### 公共配置信息如下：
+
+```
+mc config host add didiyuns3 https://s3.didiyunapi.com AKDD002DYS7H379X1YQKZFSCGOFNX1 V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12
+
+```
+
+### DC2配置信息如下：
+
+```
+mc config host add didiyuns3 https://s3-internal.didiyunapi.com AKDD002DYS7H379X1YQKZFSCGOFNX1 V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12
+
+```
+
+配置成功后，在用户目录下.mc/config.json会生成新的配置信息。
+
+```
+{
+	"version": "9",
+	"hosts": {
+		"didiyuns3": {
+			"url": "https://s3-gz.didiyunapi.com",
+			"accessKey": "AKDD002DYS7H379X1YQKZFSCGOFNX1",
+			"secretKey": "V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12",
+			"api": "s3v4",
+			"lookup": "auto"
+		}
+	}
+}
+```
+
+## 如何使用的Minio Client？
+### 查询滴滴云S3上的所有bucket
+```
+➜  ~ mc ls didiyuns3
+[2018-02-09 15:08:04 CST]     0B didiyun/
+```
+### 查询滴滴云S3上某bucket的文件列表
+```
+➜  ~ mc ls didiyuns3/didiyun
+[2018-11-04 10:57:03 CST] 107KiB 6a6f178b009847dca.jpg
+[2018-10-31 10:24:09 CST]    40B test
+[2018-08-30 15:50:07 CST]  13MiB test.mp4
+[2018-08-24 09:59:25 CST] 107KiB test_6a6f178b009847163649c7cb9s
+[2018-12-10 17:49:36 CST]     0B test/
+```
+
+### 上传文件到滴滴云S3上
+```
+➜  ~ mc cp ./test1 didiyuns3/didiyun/
+./test1:  40 B / 40 B ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓  100.00% 296 B/s 0s
+➜  ~ mc ls didiyuns3/didiyun
+[2018-11-04 10:57:03 CST] 107KiB 6a6f178b009847163649c7cb96a9e4ca.jpg
+[2018-11-13 17:56:44 CST] 3.1KiB das.graffle
+[2018-10-31 10:24:09 CST]    40B test
+[2018-08-30 15:50:07 CST]  13MiB test.mp4
+[2018-12-10 17:52:30 CST]    40B test1
+[2018-08-24 09:59:25 CST] 107KiB test_6a6f178b009847163649c7cb96a9e4ca
+[2018-12-10 17:53:39 CST]     0B test/
+```
+使用MC CP上传成功后，再重新获取到列表就会多出test1文件。
+
+### 下载滴滴云S3上的文件到本地
+```
+➜  ~ mc cp didiyuns3/didiyun/test1 ./
+...gz.didiyunapi.com/didiyun/test1:  40 B / 40 B  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓  100.00% 109 B/s 0s
+```
+### 检查分片对象是否正确
+```
+
+➜ mc check didiyun/why-test/image_1543334400_1.log.tar.gz ./image_1543334400_1.log.tar.gz.part.minio
+Right: localMd5[91ac858d19e436c7972931831efdf914] remoteMd5[91ac858d19e436c7972931831efdf914] partNumber[1]
+Wrong: localMd5[633be061e11b37d209c6d61105b39dd1] remoteMd5[adcf84c9f80612e098b922a900686b85] partNumber[2]
+Wrong: localMd5[d41d8cd98f00b204e9800998ecf8427e] remoteMd5[bb1e534133eaec67258c2b7eeb8d5b24] partNumber[3]
+Wrong: localMd5[d41d8cd98f00b204e9800998ecf8427e] remoteMd5[181edd35eea4569b7a7e9700b572f892] partNumber[4]
+Wrong: localMd5[d41d8cd98f00b204e9800998ecf8427e] remoteMd5[98e0246164ce67ce53bce9d2c77f589d] partNumber[5]
+Wrong: localMd5[d41d8cd98f00b204e9800998ecf8427e] remoteMd5[a19106f58867dbfd60edd471d22faa58] partNumber[6]
+Wrong: localMd5[d41d8cd98f00b204e9800998ecf8427e] remoteMd5[0892e7849f1c53dace7e4e4ad5cc1279] partNumber[7]
+Wrong: localMd5[d41d8cd98f00b204e9800998ecf8427e] remoteMd5[98929c633e6bee560f5d11109c37d6cc] partNumber[8]
+
+All Wrong Info
+Wrong: PartNumber[2] LocalMD5[633be061e11b37d209c6d61105b39dd1] RemoteMd5[adcf84c9f80612e098b922a900686b85] Size[67108864] LastModified[2019-06-13 11:46:04 +0000 UTC]
+Wrong: PartNumber[3] LocalMD5[d41d8cd98f00b204e9800998ecf8427e] RemoteMd5[bb1e534133eaec67258c2b7eeb8d5b24] Size[67108864] LastModified[2019-06-13 11:46:04 +0000 UTC]
+Wrong: PartNumber[4] LocalMD5[d41d8cd98f00b204e9800998ecf8427e] RemoteMd5[181edd35eea4569b7a7e9700b572f892] Size[67108864] LastModified[2019-06-13 11:46:04 +0000 UTC]
+Wrong: PartNumber[5] LocalMD5[d41d8cd98f00b204e9800998ecf8427e] RemoteMd5[98e0246164ce67ce53bce9d2c77f589d] Size[67108864] LastModified[2019-06-13 11:46:05 +0000 UTC]
+Wrong: PartNumber[6] LocalMD5[d41d8cd98f00b204e9800998ecf8427e] RemoteMd5[a19106f58867dbfd60edd471d22faa58] Size[67108864] LastModified[2019-06-13 11:46:05 +0000 UTC]
+Wrong: PartNumber[7] LocalMD5[d41d8cd98f00b204e9800998ecf8427e] RemoteMd5[0892e7849f1c53dace7e4e4ad5cc1279] Size[67108864] LastModified[2019-06-13 11:46:06 +0000 UTC]
+Wrong: PartNumber[8] LocalMD5[d41d8cd98f00b204e9800998ecf8427e] RemoteMd5[98929c633e6bee560f5d11109c37d6cc] Size[59743711] LastModified[2019-06-13 11:46:06 +0000 UTC]
+
+ALL Total: Right[1] Wrong[7]
+
+```
+
+### 修复分片对象
+```
+➜ mc check didiyun/why-test/image_1543334400_1.log.tar.gz ./image_1543334400_1.log.tar.gz.part.minio --repair
+Right: localMd5[91ac858d19e436c7972931831efdf914] remoteMd5[91ac858d19e436c7972931831efdf914] partNumber[1]
+Wrong: localMd5[633be061e11b37d209c6d61105b39dd1] remoteMd5[adcf84c9f80612e098b922a900686b85] partNumber[2]
+Wrong: localMd5[d41d8cd98f00b204e9800998ecf8427e] remoteMd5[bb1e534133eaec67258c2b7eeb8d5b24] partNumber[3]
+Wrong: localMd5[d41d8cd98f00b204e9800998ecf8427e] remoteMd5[181edd35eea4569b7a7e9700b572f892] partNumber[4]
+Wrong: localMd5[d41d8cd98f00b204e9800998ecf8427e] remoteMd5[98e0246164ce67ce53bce9d2c77f589d] partNumber[5]
+Wrong: localMd5[d41d8cd98f00b204e9800998ecf8427e] remoteMd5[a19106f58867dbfd60edd471d22faa58] partNumber[6]
+Wrong: localMd5[d41d8cd98f00b204e9800998ecf8427e] remoteMd5[0892e7849f1c53dace7e4e4ad5cc1279] partNumber[7]
+Wrong: localMd5[d41d8cd98f00b204e9800998ecf8427e] remoteMd5[98929c633e6bee560f5d11109c37d6cc] partNumber[8]
+
+All Wrong Info
+Wrong: PartNumber[2] LocalMD5[633be061e11b37d209c6d61105b39dd1] RemoteMd5[adcf84c9f80612e098b922a900686b85] Size[67108864] LastModified[2019-06-13 11:46:04 +0000 UTC]
+Wrong: PartNumber[3] LocalMD5[d41d8cd98f00b204e9800998ecf8427e] RemoteMd5[bb1e534133eaec67258c2b7eeb8d5b24] Size[67108864] LastModified[2019-06-13 11:46:04 +0000 UTC]
+Wrong: PartNumber[4] LocalMD5[d41d8cd98f00b204e9800998ecf8427e] RemoteMd5[181edd35eea4569b7a7e9700b572f892] Size[67108864] LastModified[2019-06-13 11:46:04 +0000 UTC]
+Wrong: PartNumber[5] LocalMD5[d41d8cd98f00b204e9800998ecf8427e] RemoteMd5[98e0246164ce67ce53bce9d2c77f589d] Size[67108864] LastModified[2019-06-13 11:46:05 +0000 UTC]
+Wrong: PartNumber[6] LocalMD5[d41d8cd98f00b204e9800998ecf8427e] RemoteMd5[a19106f58867dbfd60edd471d22faa58] Size[67108864] LastModified[2019-06-13 11:46:05 +0000 UTC]
+Wrong: PartNumber[7] LocalMD5[d41d8cd98f00b204e9800998ecf8427e] RemoteMd5[0892e7849f1c53dace7e4e4ad5cc1279] Size[67108864] LastModified[2019-06-13 11:46:06 +0000 UTC]
+Wrong: PartNumber[8] LocalMD5[d41d8cd98f00b204e9800998ecf8427e] RemoteMd5[98929c633e6bee560f5d11109c37d6cc] Size[59743711] LastModified[2019-06-13 11:46:06 +0000 UTC]
+
+ALL Total: Right[1] Wrong[7]
+
+Start repail size
+
+Start repail part
+Right: localMd5[adcf84c9f80612e098b922a900686b85] remoteMd5[adcf84c9f80612e098b922a900686b85] partNumber[2]
+Repair succeed: partNumber[2]
+^@Right: localMd5[bb1e534133eaec67258c2b7eeb8d5b24] remoteMd5[bb1e534133eaec67258c2b7eeb8d5b24] partNumber[3]
+Repair succeed: partNumber[3]
+^@Right: localMd5[181edd35eea4569b7a7e9700b572f892] remoteMd5[181edd35eea4569b7a7e9700b572f892] partNumber[4]
+Repair succeed: partNumber[4]
+^@Right: localMd5[98e0246164ce67ce53bce9d2c77f589d] remoteMd5[98e0246164ce67ce53bce9d2c77f589d] partNumber[5]
+Repair succeed: partNumber[5]
+^@Right: localMd5[a19106f58867dbfd60edd471d22faa58] remoteMd5[a19106f58867dbfd60edd471d22faa58] partNumber[6]
+Repair succeed: partNumber[6]
+^@Right: localMd5[0892e7849f1c53dace7e4e4ad5cc1279] remoteMd5[0892e7849f1c53dace7e4e4ad5cc1279] partNumber[7]
+Repair succeed: partNumber[7]
+Right: localMd5[98929c633e6bee560f5d11109c37d6cc] remoteMd5[98929c633e6bee560f5d11109c37d6cc] partNumber[8]
+Repair succeed: partNumber[8]
+
+Repair succedd!
+
+```
+
+### 更多指令请使用Help
+```
+➜  ~ mc help
+NAME:
+  mc - Minio Client for cloud storage and filesystems.
+
+USAGE:
+  mc [FLAGS] COMMAND [COMMAND FLAGS | -h] [ARGUMENTS...]
+
+COMMANDS:
   ls       list buckets and objects
   mb       make a bucket
   cat      display object contents
@@ -23,128 +191,18 @@ The didiyun mc is built based on Minio Client (mc) and has all the features of M
   update   update mc to latest release
   check    check big object content
   version  show version info
+
+GLOBAL FLAGS:
+  --config-dir value, -C value  path to configuration folder (default: "/Users/didi/.mc")
+  --quiet, -q                   disable progress bar display
+  --no-color                    disable color theme
+  --json                        enable JSON formatted output
+  --debug                       enable debug output
+  --insecure                    disable SSL certificate verification
+  --help, -h                    show help
+  --version, -v                 print the version
+
+VERSION:
+  DEVELOPMENT.2019-07-12T03-55-00Z
 ```
 
-## Install from Source
-Source installation is intended only for developers and advanced users. `mc update` command does not support update notifications for source based installations. Please download official releases from https://minio.io/downloads/#minio-client.
-
-If you do not have a working Golang environment, please follow [How to install Golang](https://docs.minio.io/docs/how-to-install-golang).
-
-```sh
-go get -d github.com/didiyun/mc
-cd ${GOPATH}/src/github.com/didiyun/mc
-make
-```
-
-## Add a Cloud Storage Service
-If you are planning to use `mc` only on POSIX compatible filesystems, you may skip this step and proceed to [everyday use](#everyday-use).
-
-To add one or more Amazon S3 compatible hosts, please follow the instructions below. `mc` stores all its configuration information in ``~/.mc/config.json`` file.
-
-```sh
-mc config host add <ALIAS> <YOUR-S3-ENDPOINT> <YOUR-ACCESS-KEY> <YOUR-SECRET-KEY> --api <API-SIGNATURE> --lookup <BUCKET-LOOKUP-TYPE>
-```
-
-Alias is simply a short name to your cloud storage service. S3 end-point, access and secret keys are supplied by your cloud storage provider. API signature is an optional argument. By default, it is set to "S3v4".
-
-Lookup is an optional argument. It is used to indicate whether dns or path style url requests are supported by the server. It accepts "dns", "path" or "auto" as valid values. By default, it is set to "auto" and SDK automatically determines the type of url lookup to use.
-
-### Example - Minio Cloud Storage
-Minio server displays URL, access and secret keys.
-
-```sh
-mc config host add minio http://192.168.1.51 BKIKJAA5BMMU2RHO6IBB V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12
-```
-
-### Example - Amazon S3 Cloud Storage
-Get your AccessKeyID and SecretAccessKey by following [AWS Credentials Guide](http://docs.aws.amazon.com/general/latest/gr/aws-security-credentials.html).
-
-```sh
-mc config host add s3 https://s3.amazonaws.com BKIKJAA5BMMU2RHO6IBB V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12
-```
-
-### Example - Google Cloud Storage
-Get your AccessKeyID and SecretAccessKey by following [Google Credentials Guide](https://cloud.google.com/storage/docs/migrating?hl=en#keys)
-
-```sh
-mc config host add gcs  https://storage.googleapis.com BKIKJAA5BMMU2RHO6IBB V8f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12
-```
-
-NOTE: Google Cloud Storage only supports Legacy Signature Version 2, so you have to pick - S3v2
-
-## Test Your Setup
-`mc` is pre-configured with https://play.minio.io:9000, aliased as "play". It is a hosted Minio server for testing and development purpose.  To test Amazon S3, simply replace "play" with "s3" or the alias you used at the time of setup.
-
-*Example:*
-
-List all buckets from https://play.minio.io:9000
-
-```sh
-mc ls play
-[2016-03-22 19:47:48 PDT]     0B my-bucketname/
-[2016-03-22 22:01:07 PDT]     0B mytestbucket/
-[2016-03-22 20:04:39 PDT]     0B mybucketname/
-[2016-01-28 17:23:11 PST]     0B newbucket/
-[2016-03-20 09:08:36 PDT]     0B s3git-test/
-```
-
-Make a bucket
-`mb` command creates a new bucket.
-
-*Example:*
-```sh
-mc mb play/mybucket
-Bucket created successfully `play/mybucket`.
-```
-
-Copy Objects
-`cp` command copies data from one or more sources to a target.
-
-*Example:*
-```sh
-mc cp myobject.txt play/mybucket
-myobject.txt:    14 B / 14 B  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓  100.00 % 41 B/s 0
-```
-
-
-
-<a name="everyday-use"></a>
-## Everyday Use
-
-### Shell aliases
-You may add shell aliases to override your common Unix tools.
-
-```sh
-alias ls='mc ls'
-alias cp='mc cp'
-alias cat='mc cat'
-alias mkdir='mc mb'
-alias pipe='mc pipe'
-alias find='mc find'
-```
-
-### Shell autocompletion
-You may also download [`autocomplete/bash_autocomplete`](https://raw.githubusercontent.com/minio/mc/master/autocomplete/bash_autocomplete) into `/etc/bash_completion.d/` and rename it to `mc`. Don't forget to source the file to make it active on your current shell.
-
-```sh
-sudo wget https://raw.githubusercontent.com/minio/mc/master/autocomplete/bash_autocomplete -O /etc/bash_completion.d/mc
-source /etc/bash_completion.d/mc
-```
-
-```sh
-mc <TAB>
-admin    config   diff     ls       mirror   policy   session  update   watch
-cat      cp       event    mb       pipe     rm       share    version
-```
-
-## Explore Further
-- [Minio Client Complete Guide](https://docs.minio.io/docs/minio-client-complete-guide)
-- [Minio Quickstart Guide](https://docs.minio.io/docs/minio-quickstart-guide)
-- [The Minio documentation website](https://docs.minio.io)
-
-## Contribute to Minio Project
-Please follow Minio [Contributor's Guide](https://github.com/minio/mc/blob/master/CONTRIBUTING.md)
-
-
-## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fminio%2Fmc.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fminio%2Fmc?ref=badge_large)
