@@ -1,0 +1,11 @@
+bin
+.idea
+pkg
+log
+.DS_Store
+.vscode
+vendor
+build
+log
+store
+data
