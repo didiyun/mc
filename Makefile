@@ -98,3 +98,75 @@ clean:
 	@rm -rvf mc
 	@rm -rvf build
 	@rm -rvf release
+
+
+build = GOOS=$(1) GOARCH=$(2) go build -tags kqueue --ldflags $(BUILD_LDFLAGS) -o build/mc$(3)
+tar = cd build && tar -cvzf $(1)_$(2).tar.gz mc$(3) && rm mc$(3)
+zip = cd build && zip $(1)_$(2).zip mc$(3) && rm mc$(3)
+
+release: windows_build darwin_build linux_build bsd_build
+
+##### WINDOWS BUILDS #####
+windows_build: build/windows_386.zip build/windows_amd64.zip
+
+build/windows_386.zip: checks
+	$(call build,windows,386,.exe)
+	$(call zip,windows,386,.exe)
+
+build/windows_amd64.zip: checks
+	$(call build,windows,amd64,.exe)
+	$(call zip,windows,amd64,.exe)
+
+##### LINUX BUILDS #####
+linux_build: build/linux_arm.tar.gz build/linux_arm64.tar.gz build/linux_386.tar.gz build/linux_amd64.tar.gz
+
+build/linux_386.tar.gz: checks
+	$(call build,linux,386,)
+	$(call tar,linux,386)
+
+build/linux_amd64.tar.gz: checks
+	$(call build,linux,amd64,)
+	$(call tar,linux,amd64)
+
+build/linux_arm.tar.gz: checks
+	$(call build,linux,arm,)
+	$(call tar,linux,arm)
+
+build/linux_arm64.tar.gz:checks
+	$(call build,linux,arm64,)
+	$(call tar,linux,arm64)
+
+##### DARWIN (MAC) BUILDS #####
+darwin_build: build/darwin_amd64.tar.gz
+
+build/darwin_amd64.tar.gz: checks
+	$(call build,darwin,amd64,)
+	$(call tar,darwin,amd64)
+
+##### BSD BUILDS #####
+bsd_build: build/freebsd_arm.tar.gz build/freebsd_386.tar.gz build/freebsd_amd64.tar.gz \
+ build/openbsd_arm.tar.gz build/openbsd_386.tar.gz build/openbsd_amd64.tar.gz
+
+build/freebsd_386.tar.gz:checks
+	$(call build,freebsd,386,)
+	$(call tar,freebsd,386)
+
+build/freebsd_amd64.tar.gz: checks
+	$(call build,freebsd,amd64,)
+	$(call tar,freebsd,amd64)
+
+build/freebsd_arm.tar.gz: checks
+	$(call build,freebsd,arm,)
+	$(call tar,freebsd,arm)
+
+build/openbsd_386.tar.gz: checks
+	$(call build,openbsd,386,)
+	$(call tar,openbsd,386)
+
+build/openbsd_amd64.tar.gz: checks
+	$(call build,openbsd,amd64,)
+	$(call tar,openbsd,amd64)
+
+build/openbsd_arm.tar.gz: checks
+	$(call build,openbsd,arm,)
+	$(call tar,openbsd,arm)
